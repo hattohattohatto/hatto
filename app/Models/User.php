@@ -22,9 +22,9 @@ class User extends Authenticatable
         'email',
         'password'
     ];
-}
 
-public function followers()
+
+    public function followers()
     {
         return $this->belongsToMany(self::class, 'followers', 'followed_id', 'following_id');
     }
@@ -33,3 +33,4 @@ public function followers()
     {
         return $this->belongsToMany(self::class, 'followers', 'following_id', 'followed_id');
     }
+}
