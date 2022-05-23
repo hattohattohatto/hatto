@@ -4011,7 +4011,7 @@ textarea.form-control-lg {
   text-align: center;
 }
 
-.nav-fill .nav-item .nav-link,
+.nav-fill .nav-item .nav-link ,
 .nav-justified .nav-item .nav-link {
   width: 100%;
 }
@@ -11286,3 +11286,4 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+

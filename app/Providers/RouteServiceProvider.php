@@ -12,12 +12,15 @@ class RouteServiceProvider extends ServiceProvider
 {
     /**
      * The path to the "home" route for your application.
+     *↑って書いてあるけど速攻でツイート画面いけるようにかえたよー
      *
      * This is used by Laravel authentication to redirect users after login.
      *
      * @var string
      */
-    public const HOME = '/home';
+
+    
+    public const tweets = '/tweets';
 
     /**
      * Define your route model bindings, pattern filters, etc.
