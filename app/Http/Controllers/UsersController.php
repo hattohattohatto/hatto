@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 use App\Models\User;
 use App\Models\Tweet;
 use App\Models\Follower;
@@ -12,6 +10,22 @@ use App\Models\Follower;
 
 class UsersController extends Controller
 {
+    /**
+     * ミドルウェアでのバリデーション
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('profilecheck')->only('update');
+    }
+    /**
+     * ツイートのリストを表示
+     * 
+     * @param  User $User
+     * 
+     * @return \Illuminate\View\View
+     */
     public function index(User $user)
     {
         $all_users = $user->getAllUsers(auth()->user()->id);
@@ -22,137 +36,94 @@ class UsersController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * ツイート表示
      *
-     * @return \Illuminate\Http\Response
-     */
-    // public function index()
-    // {
-    //     //
-    // }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  User $User
+     * @param  Tweet $Tweet
+     * @param  Follower $Follower
+     * 
+     * @return \Illuminate\View\View
      */
     public function show(User $user, Tweet $tweet, Follower $follower)
-        {
-            $login_user = auth()->user();
-            $is_following = $login_user->isFollowing($user->id);
-            $is_followed = $login_user->isFollowed($user->id);
-            $timelines = $tweet->getUserTimeLine($user->id);
-            $tweet_count = $tweet->getTweetCount($user->id);
-            $follow_count = $follower->getFollowCount($user->id);
-            $follower_count = $follower->getFollowerCount($user->id);
+    {
+        $isFollowing = $user->isFollowing($user->id);
+        $isFollowed = $user->isFollowed($user->id);
+        $timelines = $tweet->getUserTimeLine($user->id);
+        $tweetCount = $tweet->getTweetCount($user->id);
+        $followCount = $follower->getFollowCount($user->id);
+        $followerCount = $follower->getFollowerCount($user->id);
 
-            return view('users.show', [
-                'user'           => $user,
-                'is_following'   => $is_following,
-                'is_followed'    => $is_followed,
-                'timelines'      => $timelines,
-                'tweet_count'    => $tweet_count,
-                'follow_count'   => $follow_count,
-                'follower_count' => $follower_count
-            ]);
-        }
+        return view('users.show', [
+            'user'           => $user,
+            'is_following'   => $isFollowing,
+            'is_followed'    => $isFollowed,
+            'timelines'      => $timelines,
+            'tweet_count'    => $tweetCount,
+            'follow_count'   => $followCount,
+            'follower_count' => $followerCount
+        ]);
+    }
 
     /**
-     * Show the form for editing the specified resource.
+     * ツイート作成
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  User $user
+     * 
+     * @return \Illuminate\View\View
      */
     public function edit(User $user)
     {
         return view('users.edit', ['user' => $user]);
     }
 
-    
+
     /**
-     * Update the specified resource in storage.
+     * ツイート編集
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  User $user
+     * 
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, User $user)
     {
         $data = $request->all();
-        $validator = Validator::make($data, [
-            'screen_name'   => ['required', 'string', 'max:50', Rule::unique('users')->ignore($user->id)],
-            'name'          => ['required', 'string', 'max:255'],
-            'profile_image' => ['file', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
-            'email'         => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)]
-        ]);
-        $validator->validate();
         $user->updateProfile($data);
 
-        return redirect('users/'.$user->id);
+        return redirect('users/' . $user->id);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * フォロー解除
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * 
+     * @return \Illuminate\Foundation\helpers
      */
-    public function destroy($id)
-    {
-        //
-    }
-
-    // フォロー
     public function follow(int $id)
     {
         $follower = auth()->user();
-        // フォローしているか
         $is_following = $follower->isFollowing($id);
-        if(!$is_following) {
-            // フォローしていなければフォローする
+        if (!$is_following) {
             $follower->follow($id);
             return back();
         }
     }
 
-    // フォロー解除
+    /**
+     * フォロー解除
+     *
+     * @param  int  $id
+     * 
+     * @return \Illuminate\Foundation\helpers
+     */
     public function unfollow(int $id)
     {
         $follower = auth()->user();
-        // フォローしているか
         $is_following = $follower->isFollowing($id);
-        if($is_following) {
-            // フォローしていればフォローを解除する
+        if ($is_following) {
             $follower->unfollow($id);
             return back();
         }
-
-    
-    
     }
-    
-    
 }
-

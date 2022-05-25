@@ -3,24 +3,34 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use App\Models\Tweet;
 use App\Models\Comment;
 use App\Models\Follower;
 
-
 class TweetsController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * ミドルウェアでのバリデーション
+     * 
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('tweetcheck')->only(['store', 'update']);
+    }
+
+    /**
+     * ツイートのリストを表示
      *
-     * @return \Illuminate\Http\Response
+     * @param \App\Models\Tweet
+     * @param \App\Models\Follower
+     * 
+     * @return \Illuminate\View\View
      */
     public function index(Tweet $tweet, Follower $follower)
     {
         $user = auth()->user();
         $follow_ids = $follower->followingIds($user->id);
-        // followed_idだけ抜き出す
         $following_ids = $follow_ids->pluck('followed_id')->toArray();
 
         $timelines = $tweet->getTimelines($user->id, $following_ids);
@@ -32,9 +42,9 @@ class TweetsController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * ツイート作成
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\view\View
      */
     public function create()
     {
@@ -46,21 +56,32 @@ class TweetsController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * ツイート保存機能
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  \App\Models\Tweet $tweet
+     * 
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
+<<<<<<< Updated upstream
         //
+=======
+        $user = auth()->user();
+        $tweet->tweetStore($user->id, $data);
+
+        return redirect('tweets');
+>>>>>>> Stashed changes
     }
 
     /**
-     * Display the specified resource.
+     * ツイート表示
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  \App\Models\Tweet $tweet
+     * @param  \App\Models\Comment $comment
+     * 
+     * @return \Illuminate\View\View
      */
     public function show(Tweet $tweet, Comment $comment)
     {
@@ -76,10 +97,12 @@ class TweetsController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * ツイート編集
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  \App\Models\Tweet $tweet
+     * 
+     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\View\View
      */
     public function edit($id)
     {
@@ -87,26 +110,38 @@ class TweetsController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * ツイート更新
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  \App\Models\Tweet $tweet
+     * 
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
+<<<<<<< Updated upstream
         //
+=======
+        $data = $request->all();
+        $tweet->tweetUpdate($tweet->id, $data);
+
+        return redirect('tweets');
+>>>>>>> Stashed changes
     }
 
     /**
-     * Remove the specified resource from storage.
+     * ツイート削除
      *
-     * @param  int  $id
+     * @param  \App\Models\Tweet $tweet
+     * 
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         //
     }
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 }
