@@ -91,13 +91,11 @@ class Tweet extends Model
     {
         return $this->with('user')->where('id', $tweetId)->first();
     }
-<<<<<<< Updated upstream
-=======
 
     /**
      * ツイートの保存
      *
-     * @param integer $userId
+     * @param int $userId
      * @param array $data
      * 
      * @return void
@@ -153,5 +151,4 @@ class Tweet extends Model
     {
         return $this->where('user_id', $userId)->where('id', $tweetId)->delete();
     }
->>>>>>> Stashed changes
 }

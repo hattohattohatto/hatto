@@ -63,16 +63,13 @@ class TweetsController extends Controller
      * 
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request  $request, Tweet $tweet)
     {
-<<<<<<< Updated upstream
-        //
-=======
         $user = auth()->user();
+        $data = $request->all();
         $tweet->tweetStore($user->id, $data);
 
         return redirect('tweets');
->>>>>>> Stashed changes
     }
 
     /**
@@ -117,16 +114,12 @@ class TweetsController extends Controller
      * 
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Tweet $tweet)
     {
-<<<<<<< Updated upstream
-        //
-=======
         $data = $request->all();
         $tweet->tweetUpdate($tweet->id, $data);
 
         return redirect('tweets');
->>>>>>> Stashed changes
     }
 
     /**
@@ -136,12 +129,11 @@ class TweetsController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Tweet $tweet)
     {
-        //
-    }
-<<<<<<< Updated upstream
+        $user = auth()->user();
+        $tweet->tweetDestroy($user->id, $tweet->id);
 
-=======
->>>>>>> Stashed changes
+        return back();
+    }
 }
