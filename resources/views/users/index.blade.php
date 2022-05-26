@@ -25,6 +25,7 @@
                                         
 
                                         <button type="submit" class="btn btn-danger">フォロー解除</button>
+                                        <input name= "loginUserId" type="hidden" value = "{{ auth()->userId }}">
                                     </form>
                                 @else
                                 <form action="{{ route('follow', ['id' => $user->id]) }}" method="POST">

@@ -95,7 +95,7 @@ class User extends Authenticatable
     /**
      * フォローされているかどうか
      *
-     * @param integer $userId
+     * @param int $userId
      * 
      * @return boolean
      */

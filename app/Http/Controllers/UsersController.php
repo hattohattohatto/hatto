@@ -94,18 +94,19 @@ class UsersController extends Controller
     }
 
     /**
-     * フォロー解除
+     * フォロー
      *
-     * @param  int  $id
+     * @param \Illuminate\Http\Request  $request
+     * @param User $user
      * 
      * @return \Illuminate\Foundation\helpers
      */
-    public function follow(int $id)
+    public function follow(Request $request, User $user)
     {
-        $follower = auth()->user();
-        $is_following = $follower->isFollowing($id);
-        if (!$is_following) {
-            $follower->follow($id);
+        $follower = $user->where('id', $request->loginUserId);
+        $isFollowing = $follower->isFollowing($request->id);
+        if (!$isFollowing) {
+            $follower->follow($request->id);
             return back();
         }
     }
@@ -113,16 +114,17 @@ class UsersController extends Controller
     /**
      * フォロー解除
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request  $request
+     * @param User $user
      * 
      * @return \Illuminate\Foundation\helpers
      */
-    public function unfollow(int $id)
+    public function unfollow(Request  $request, User $user)
     {
-        $follower = auth()->user();
-        $is_following = $follower->isFollowing($id);
-        if ($is_following) {
-            $follower->unfollow($id);
+        $follower = $user->where('id', $request->loginUserId);
+        $isFollowing = $follower->isFollowing($request->id);
+        if ($isFollowing) {
+            $follower->unfollow($request->id);
             return back();
         }
     }
