@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Tweet;
 use App\Models\Comment;
 use App\Models\Follower;
+use Illuminate\Support\Facades\Auth;
 
 class TweetsController extends Controller
 {
@@ -16,7 +17,7 @@ class TweetsController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('tweetcheck')->only(['store', 'update']);
+        $this->middleware('tweet')->only(['store', 'update']);
     }
 
     /**
@@ -30,10 +31,10 @@ class TweetsController extends Controller
     public function index(Tweet $tweet, Follower $follower)
     {
         $user = auth()->user();
-        $follow_ids = $follower->followingIds($user->id);
-        $following_ids = $follow_ids->pluck('followed_id')->toArray();
+        $followIds = $follower->followingIds($user->id);
+        $followingIds = $followIds->pluck('followed_id')->toArray();
 
-        $timelines = $tweet->getTimelines($user->id, $following_ids);
+        $timelines = $tweet->getTimelines($user->id, $followingIds);
 
         return view('tweets.index', [
             'user'      => $user,
@@ -60,14 +61,15 @@ class TweetsController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Tweet $tweet
-     * 
+     * @param  Illuminate\Support\Facades\Auth
+     *       
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request  $request, Tweet $tweet)
+    public function store(Request $request, Tweet $tweet)
     {
-        $user = auth()->user();
+        $id = Auth::id();
         $data = $request->all();
-        $tweet->tweetStore($user->id, $data);
+        $tweet->tweetStore($id, $data);
 
         return redirect('tweets');
     }
@@ -88,7 +90,7 @@ class TweetsController extends Controller
 
         return view('tweets.show', [
             'user'     => $user,
-            'tweet' => $tweet,
+            'tweet'    => $tweet,
             'comments' => $comments
         ]);
     }
@@ -96,14 +98,23 @@ class TweetsController extends Controller
     /**
      * ツイート編集
      *
-     * @param  \App\Models\Tweet $tweet
+     * @param Tweet $tweet
      * 
-     * @return \Illuminate\Http\RedirectResponse
      * @return \Illuminate\View\View
      */
-    public function edit($id)
+    public function edit(Tweet $tweet)
     {
-        //
+        $user = auth()->user();
+        $tweets = $tweet->getEditTweet($user->id, $tweet->id);
+
+        if (!isset($tweets)) {
+            return redirect('tweets');
+        }
+
+        return view('tweets.edit', [
+            'user'   => $user,
+            'tweets' => $tweets
+        ]);
     }
 
     /**
@@ -126,13 +137,14 @@ class TweetsController extends Controller
      * ツイート削除
      *
      * @param  \App\Models\Tweet $tweet
+     * @param  \lluminate\Support\Facades\Auth
      * 
      * @return \Illuminate\Http\Response
      */
     public function destroy(Tweet $tweet)
     {
-        $user = auth()->user();
-        $tweet->tweetDestroy($user->id, $tweet->id);
+        $userId = Auth::id();
+        $tweet->tweetDestroy($userId, $tweet->id);
 
         return back();
     }

@@ -7,7 +7,6 @@ use App\Models\User;
 use App\Models\Tweet;
 use App\Models\Follower;
 
-
 class UsersController extends Controller
 {
     /**
@@ -17,8 +16,9 @@ class UsersController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('profilecheck')->only('update');
+        $this->middleware('profile')->only('update');
     }
+
     /**
      * ツイートのリストを表示
      * 
@@ -28,10 +28,10 @@ class UsersController extends Controller
      */
     public function index(User $user)
     {
-        $all_users = $user->getAllUsers(auth()->user()->id);
+        $users = $user->getAllUsers(auth()->user()->id);
 
         return view('users.index', [
-            'all_users'  => $all_users
+            'all_users'  => $users
         ]);
     }
 
@@ -76,7 +76,6 @@ class UsersController extends Controller
         return view('users.edit', ['user' => $user]);
     }
 
-
     /**
      * ツイート編集
      *
@@ -96,17 +95,17 @@ class UsersController extends Controller
     /**
      * フォロー
      *
-     * @param \Illuminate\Http\Request  $request
-     * @param User $user
+     * @param int id
      * 
      * @return \Illuminate\Foundation\helpers
      */
-    public function follow(Request $request, User $user)
+    public function follow(int $id)
     {
-        $follower = $user->where('id', $request->loginUserId);
-        $isFollowing = $follower->isFollowing($request->id);
+        $user = User::find($id);
+        $follower = auth()->user();
+        $isFollowing = $follower->isFollowing($user->id);
         if (!$isFollowing) {
-            $follower->follow($request->id);
+            $follower->follow($user->id);
             return back();
         }
     }
@@ -114,17 +113,17 @@ class UsersController extends Controller
     /**
      * フォロー解除
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param User $user
+     * @param int id
      * 
      * @return \Illuminate\Foundation\helpers
      */
-    public function unfollow(Request  $request, User $user)
+    public function unfollow(Request $request, User $user, int $id)
     {
-        $follower = $user->where('id', $request->loginUserId);
-        $isFollowing = $follower->isFollowing($request->id);
+        $user = User::find($id);
+        $follower = auth()->user();
+        $isFollowing = $follower->isFollowing($user->id);
         if ($isFollowing) {
-            $follower->unfollow($request->id);
+            $follower->unfollow($user->id);
             return back();
         }
     }

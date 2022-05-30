@@ -12,8 +12,6 @@ class Favorite extends Model
      * @var bool
      */
     public $timestamps = false;
-<<<<<<< Updated upstream
-=======
 
     /**
      * ツイートのIDを取得
@@ -26,5 +24,4 @@ class Favorite extends Model
     {
         return $this->with('user')->where('tweet_id', $tweetId)->get();
     }
->>>>>>> Stashed changes
 }

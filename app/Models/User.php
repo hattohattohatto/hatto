@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -23,9 +22,8 @@ class User extends Authenticatable
         'password'
     ];
 
-
     /**
-     * 
+     * フォロワー、フォローされている人のID,フォローしている人のIDのリレーションを定義（多対他）
      *
      * @return \Illuminate\Http\Response
      */
@@ -35,7 +33,7 @@ class User extends Authenticatable
     }
 
     /**
-     * フォロー、フォロワーのリレーションを定義（多対他）
+     * フォロワー、フォローしている人のID、フォローされている人のIDのリレーションを定義（多対他）
      *
      * @return \Illuminate\Http\Response
      */
@@ -89,7 +87,7 @@ class User extends Authenticatable
      */
     public function isFollowing(int $userId)
     {
-        return (bool) $this->follows()->where('followed_id', $userId)->first(['id']);
+        return (bool) $this->follows()->where('followed_id', $userId)->first();
     }
 
     /**
@@ -101,7 +99,7 @@ class User extends Authenticatable
      */
     public function isFollowed(int $userId)
     {
-        return (bool) $this->followers()->where('following_id', $userId)->first(['id']);
+        return (bool) $this->followers()->where('following_id', $userId)->first();
     }
 
     /**

@@ -5,8 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\softDeletes;
 
-
-
 class Tweet extends Model
 {
     use SoftDeletes;
@@ -18,7 +16,6 @@ class Tweet extends Model
     protected $fillable = [
         'text'
     ];
-
 
     /**
      * ユーザーのリレーションを定義（他対一）
@@ -62,7 +59,7 @@ class Tweet extends Model
         return $this->where('user_id', $userId)->orderBy('created_at', 'DESC')->paginate(50);
     }
 
-    public function getTweetCount(Int $userId)
+    public function getTweetCount(int $userId)
     {
         return $this->where('user_id', $userId)->count();
     }
@@ -92,21 +89,11 @@ class Tweet extends Model
         return $this->with('user')->where('id', $tweetId)->first();
     }
 
-    /**
-     * ツイートの保存
-     *
-     * @param int $userId
-     * @param array $data
-     * 
-     * @return void
-     */
     public function tweetStore(int $userId, array $data): void
     {
-        $this->userId = $userId;
+        $this->user_id = $userId;
         $this->text = $data['text'];
         $this->save();
-
-        return;
     }
 
     /**
@@ -135,8 +122,6 @@ class Tweet extends Model
         $this->id = $tweetId;
         $this->text = $data['text'];
         $this->update();
-
-        return;
     }
 
     /**
@@ -150,5 +135,27 @@ class Tweet extends Model
     public function tweetDestroy(int $userId, int $tweetId)
     {
         return $this->where('user_id', $userId)->where('id', $tweetId)->delete();
+    }
+
+    /**
+     * ツイート編集
+     *
+     * @param Tweet $tweet
+     * 
+     * @return \Illuminate\View\View
+     */
+    public function edit(Tweet $tweet)
+    {
+        $user = auth()->user();
+        $tweets = $tweet->getEditTweet($user->id, $tweet->id);
+
+        if (!isset($tweets)) {
+            return redirect('tweets');
+        }
+
+        return view('tweets.edit', [
+            'user'   => $user,
+            'tweets' => $tweets
+        ]);
     }
 }

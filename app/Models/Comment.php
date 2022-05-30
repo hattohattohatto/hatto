@@ -30,7 +30,7 @@ class Comment extends Model
 
 
     /**
-     * ツイートのIDを取得
+     * コメントをツイートのIDより取得
      * 
      * @return \Illuminate\Http\Response
      */

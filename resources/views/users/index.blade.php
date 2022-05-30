@@ -10,7 +10,7 @@
                             <img src="{{ asset('storage/profile_image/' .$user->profile_image) }}" class="rounded-circle" width="50" height="50">
                             <div class="ml-2 d-flex flex-column">
                                 <p class="mb-0">{{ $user->name }}</p>
-                                <a href="{{ route('users/' .$user->id) }}" class="text-secondary">{{ $user->screen_name }}</a>
+                                <a href="{{ route('users.show', $user->id) }}" class="text-secondary">{{ $user->screen_name }}</a>
                             </div>
                             @if (auth()->user()->isFollowed($user->id))
                                 <div class="px-2">
@@ -25,7 +25,6 @@
                                         
 
                                         <button type="submit" class="btn btn-danger">フォロー解除</button>
-                                        <input name= "loginUserId" type="hidden" value = "{{ auth()->userId }}">
                                     </form>
                                 @else
                                 <form action="{{ route('follow', ['id' => $user->id]) }}" method="POST">
