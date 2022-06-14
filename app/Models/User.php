@@ -87,7 +87,7 @@ class User extends Authenticatable
      */
     public function isFollowing(int $userId)
     {
-        return (bool) $this->follows()->where('followed_id', $userId)->first();
+        return (bool) $this->follows()->where('followed_id', $userId)->exists();
     }
 
     /**
@@ -99,7 +99,7 @@ class User extends Authenticatable
      */
     public function isFollowed(int $userId)
     {
-        return (bool) $this->followers()->where('following_id', $userId)->first();
+        return (bool) $this->followers()->where('following_id', $userId)->exists();
     }
 
     /**
@@ -113,7 +113,6 @@ class User extends Authenticatable
     {
         if (isset($params['profile_image'])) {
             $fileName = $params['profile_image']->store('public/profile_image/');
-
             $this::where('id', $this->id)
                 ->update([
                     'screen_name'   => $params['screen_name'],
@@ -129,7 +128,6 @@ class User extends Authenticatable
                     'email'         => $params['email'],
                 ]);
         }
-
         return;
     }
 }

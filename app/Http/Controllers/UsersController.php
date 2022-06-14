@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Tweet;
 use App\Models\Follower;
+use App\Http\Controllers\Controller;
 
 class UsersController extends Controller
 {
@@ -46,8 +47,8 @@ class UsersController extends Controller
      */
     public function show(User $user, Tweet $tweet, Follower $follower)
     {
-        $isFollowing = $user->isFollowing($user->id);
-        $isFollowed = $user->isFollowed($user->id);
+        $isFollowing = auth()->user()->isFollowing($user->id);
+        $isFollowed = auth()->user()->isFollowed($user->id);
         $timelines = $tweet->getUserTimeLine($user->id);
         $tweetCount = $tweet->getTweetCount($user->id);
         $followCount = $follower->getFollowCount($user->id);
@@ -55,12 +56,12 @@ class UsersController extends Controller
 
         return view('users.show', [
             'user'           => $user,
-            'is_following'   => $isFollowing,
-            'is_followed'    => $isFollowed,
+            'isFollowing'   => $isFollowing,
+            'isFollowed'    => $isFollowed,
             'timelines'      => $timelines,
-            'tweet_count'    => $tweetCount,
-            'follow_count'   => $followCount,
-            'follower_count' => $followerCount
+            'tweetCount'    => $tweetCount,
+            'followCount'   => $followCount,
+            'followerCount' => $followerCount
         ]);
     }
 
@@ -95,36 +96,40 @@ class UsersController extends Controller
     /**
      * フォロー
      *
-     * @param int id
+     * @param Follower $follower
+     * @param int $followedId
      * 
-     * @return \Illuminate\Foundation\helpers
+     * @return @return \Illuminate\Foundation\helpers
      */
-    public function follow(int $id)
+    public function follow(Follower $follower, int $followedId)
     {
-        $user = User::find($id);
-        $follower = auth()->user();
-        $isFollowing = $follower->isFollowing($user->id);
+        $followingId = auth()->user()->id;
+        $isFollowing = auth()->user()->isFollowing($followedId);
         if (!$isFollowing) {
-            $follower->follow($user->id);
-            return back();
+            $follower->fill([
+                'following_id' => $followingId,
+                'followed_id' => $followedId,
+            ]);
+            $follower->save();
         }
+        return back();
     }
 
     /**
      * フォロー解除
      *
-     * @param int id
+     * @param Follower $follower
+     * @param int $followedId
      * 
-     * @return \Illuminate\Foundation\helpers
+     * @return @return \Illuminate\Foundation\helpers
      */
-    public function unfollow(Request $request, User $user, int $id)
+    public function unfollow(Follower $follower, int $followedId)
     {
-        $user = User::find($id);
-        $follower = auth()->user();
-        $isFollowing = $follower->isFollowing($user->id);
+        $followingId = auth()->user()->id;
+        $isFollowing = auth()->user()->isFollowing($followedId);
         if ($isFollowing) {
-            $follower->unfollow($user->id);
-            return back();
+            $follower->where('following_id', $followingId)->where('followed_id', $followedId)->delete();
         }
+        return back();
     }
 }

@@ -58,6 +58,7 @@ class Kernel extends HttpKernel
         'auth.session' => \Illuminate\Session\Middleware\AuthenticateSession::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
+        'comment' => \App\Http\Middleware\CommentValidateMiddleware::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         'profile' => \App\Http\Middleware\ProfileValidateMiddleware::class,
@@ -65,6 +66,5 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'tweet' => \App\Http\Middleware\TweetValidateMiddleware::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class
-
     ];
 }

@@ -16,6 +16,7 @@ Route::get('/users', [UsersController::class, 'index']);
 |
 */
 
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -31,9 +32,17 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('users', 'UsersController', ['only' => ['index', 'show', 'edit', 'update']]);
 
     // フォロー/フォロー解除を追加
-    Route::post('follow/{id}', 'UsersController@follow')->name('follow');
-    Route::delete('unfollow/{id}', 'UsersController@unfollow')->name('unfollow');;
-});
+    Route::post('users/{user}/follow', [UsersController::class, 'follow'])->name('follow');
+    Route::delete('users/{user}/unfollow', [UsersController::class, 'unfollow'])->name('unfollow');;
 
-// ツイート関連
-Route::resource('tweets', 'TweetsController', ['only' => ['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']]);
+    // コメント関連
+    Route::resource('comments', 'CommentsController', ['only' => ['store']]);
+
+    // いいね関連
+    Route::post('favorites/{id}', 'App\Http\Controllers\FavoritesController@store')->name('favorites.store');
+    Route::delete('favorites/{id}', 'App\Http\Controllers\FavoritesController@destroy')->name('favorites.destroy');
+
+
+    // ツイート関連
+    Route::resource('tweets', 'TweetsController', ['only' => ['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']]);
+});
