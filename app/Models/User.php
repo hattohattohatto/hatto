@@ -23,7 +23,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * フォロワー、フォローされている人のID,フォローしている人のIDのリレーションを定義（多対他）
+     * フォロワー、フォローされている人のID,フォローしている人のIDのリレーションを定義（多対多）
      *
      * @return \Illuminate\Http\Response
      */
@@ -33,7 +33,7 @@ class User extends Authenticatable
     }
 
     /**
-     * フォロワー、フォローしている人のID、フォローされている人のIDのリレーションを定義（多対他）
+     * フォロワー、フォローしている人のID、フォローされている人のIDのリレーションを定義（多対多）
      *
      * @return \Illuminate\Http\Response
      */
@@ -115,17 +115,17 @@ class User extends Authenticatable
             $fileName = $params['profile_image']->store('public/profile_image/');
             $this::where('id', $this->id)
                 ->update([
-                    'screen_name'   => $params['screen_name'],
-                    'name'          => $params['name'],
+                    'screen_name' => $params['screen_name'],
+                    'name' => $params['name'],
                     'profile_image' => basename($fileName),
-                    'email'         => $params['email'],
+                    'email' => $params['email'],
                 ]);
         } else {
             $this::where('id', $this->id)
                 ->update([
-                    'screen_name'   => $params['screen_name'],
-                    'name'          => $params['name'],
-                    'email'         => $params['email'],
+                    'screen_name' => $params['screen_name'],
+                    'name' => $params['name'],
+                    'email' => $params['email'],
                 ]);
         }
         return;

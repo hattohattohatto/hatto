@@ -154,7 +154,7 @@ class Tweet extends Model
         }
 
         return view('tweets.edit', [
-            'user'   => $user,
+            'user' => $user,
             'tweets' => $tweets
         ]);
     }

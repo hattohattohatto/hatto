@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Tweet;
 use App\Models\Comment;
 use App\Models\Follower;
-use Illuminate\Support\Facades\Auth;
+use phpDocumentor\Reflection\PseudoTypes\False_;
 
 class TweetsController extends Controller
 {
@@ -17,7 +17,7 @@ class TweetsController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('tweet')->only(['store', 'update']);
+        $this->middleware('tweet.validate')->only(['store', 'update']);
     }
 
     /**
@@ -31,14 +31,12 @@ class TweetsController extends Controller
     public function index(Tweet $tweet, Follower $follower)
     {
         $user = auth()->user();
-        $followIds = $follower->followingIds($user->id);
-        $followingIds = $followIds->pluck('followed_id')->toArray();
-
-        $timelines = $tweet->getTimelines($user->id, $followingIds);
+        $followingIds = $follower->followingIds($user->id)->pluck('followed_id')->toArray();
+        $fetchTimelines = $tweet->getTimelines($user->id, $followingIds);
 
         return view('tweets.index', [
-            'user'      => $user,
-            'timelines' => $timelines
+            'user'  => $user,
+            'timelines' => $fetchTimelines
         ]);
     }
 
@@ -61,15 +59,14 @@ class TweetsController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Tweet $tweet
-     * @param  Illuminate\Support\Facades\Auth
      *       
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request, Tweet $tweet)
     {
-        $id = Auth::id();
-        $data = $request->all();
-        $tweet->tweetStore($id, $data);
+        $userId = auth()->id();
+        $tweetData = $request->all();
+        $tweet->tweetStore($userId, $tweetData);
 
         return redirect('tweets');
     }
@@ -89,8 +86,8 @@ class TweetsController extends Controller
         $comments = $comment->getComments($tweet->id);
 
         return view('tweets.show', [
-            'user'     => $user,
-            'tweet'    => $tweet,
+            'user' => $user,
+            'tweet' => $tweet,
             'comments' => $comments
         ]);
     }
@@ -107,12 +104,8 @@ class TweetsController extends Controller
         $user = auth()->user();
         $tweets = $tweet->getEditTweet($user->id, $tweet->id);
 
-        if (!isset($tweets)) {
-            return redirect('tweets');
-        }
-
-        return view('tweets.edit', [
-            'user'   => $user,
+        return isset($tweets) == False ? redirect('tweet') : view('tweets.edit', [
+            'user' => $user,
             'tweets' => $tweets
         ]);
     }
@@ -127,8 +120,8 @@ class TweetsController extends Controller
      */
     public function update(Request $request, Tweet $tweet)
     {
-        $data = $request->all();
-        $tweet->tweetUpdate($tweet->id, $data);
+        $tweetData = $request->all();
+        $tweet->tweetUpdate($tweet->id, $tweetData);
 
         return redirect('tweets');
     }
@@ -137,13 +130,12 @@ class TweetsController extends Controller
      * ツイート削除
      *
      * @param  \App\Models\Tweet $tweet
-     * @param  \lluminate\Support\Facades\Auth
      * 
      * @return \Illuminate\Http\Response
      */
     public function destroy(Tweet $tweet)
     {
-        $userId = Auth::id();
+        $userId = auth()->id();
         $tweet->tweetDestroy($userId, $tweet->id);
 
         return back();

@@ -58,13 +58,13 @@ class Kernel extends HttpKernel
         'auth.session' => \Illuminate\Session\Middleware\AuthenticateSession::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
-        'comment' => \App\Http\Middleware\CommentValidateMiddleware::class,
+        'comment.validate' => \App\Http\Middleware\CommentValidateMiddleware::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
-        'profile' => \App\Http\Middleware\ProfileValidateMiddleware::class,
+        'profile.validate' => \App\Http\Middleware\ProfileValidateMiddleware::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'tweet' => \App\Http\Middleware\TweetValidateMiddleware::class,
+        'tweet.validate' => \App\Http\Middleware\TweetValidateMiddleware::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class
     ];
 }

@@ -17,7 +17,7 @@ class UsersController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('profile')->only('update');
+        $this->middleware('profile.validate')->only('update');
     }
 
     /**
@@ -29,10 +29,10 @@ class UsersController extends Controller
      */
     public function index(User $user)
     {
-        $users = $user->getAllUsers(auth()->user()->id);
+        $users = $user->getAllUsers(auth()->id());
 
         return view('users.index', [
-            'all_users'  => $users
+            'allUsers'  => $users
         ]);
     }
 
@@ -55,12 +55,12 @@ class UsersController extends Controller
         $followerCount = $follower->getFollowerCount($user->id);
 
         return view('users.show', [
-            'user'           => $user,
-            'isFollowing'   => $isFollowing,
-            'isFollowed'    => $isFollowed,
-            'timelines'      => $timelines,
-            'tweetCount'    => $tweetCount,
-            'followCount'   => $followCount,
+            'user' => $user,
+            'isFollowing' => $isFollowing,
+            'isFollowed' => $isFollowed,
+            'timelines' => $timelines,
+            'tweetCount' => $tweetCount,
+            'followCount' => $followCount,
             'followerCount' => $followerCount
         ]);
     }
@@ -87,8 +87,8 @@ class UsersController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $data = $request->all();
-        $user->updateProfile($data);
+        $tweetData = $request->all();
+        $user->updateProfile($tweetData);
 
         return redirect('users/' . $user->id);
     }
@@ -99,11 +99,11 @@ class UsersController extends Controller
      * @param Follower $follower
      * @param int $followedId
      * 
-     * @return @return \Illuminate\Foundation\helpers
+     * @return \Illuminate\Foundation\helpers
      */
     public function follow(Follower $follower, int $followedId)
     {
-        $followingId = auth()->user()->id;
+        $followingId = auth()->id();
         $isFollowing = auth()->user()->isFollowing($followedId);
         if (!$isFollowing) {
             $follower->fill([
@@ -121,7 +121,7 @@ class UsersController extends Controller
      * @param Follower $follower
      * @param int $followedId
      * 
-     * @return @return \Illuminate\Foundation\helpers
+     * @return \Illuminate\Foundation\helpers
      */
     public function unfollow(Follower $follower, int $followedId)
     {

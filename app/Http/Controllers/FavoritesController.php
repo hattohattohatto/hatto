@@ -17,13 +17,13 @@ class FavoritesController extends Controller
      */
     public function store(Request $request, Favorite $favorite)
     {
-        $user = auth()->user();
+        $userId = auth()->id();
         $tweetId = $request->tweet_id;
-        $isFavorite = $favorite->isFavorite($user->id, $tweetId);
+        $isFavorite = $favorite->isFavorite($userId, $tweetId);
 
         if (!$isFavorite) {
             $favorite->fill([
-                'user_id' => $user->id,
+                'user_id' => $userId,
                 'tweet_id' => $tweetId,
             ]);
             $favorite->save();
@@ -35,17 +35,18 @@ class FavoritesController extends Controller
      * いいね削除
      *
      * @param Favorite $favorite
+     * @param Request $request
      * 
      * @return \Illuminate\Foundation\helpers
      */
     public function destroy(Request $request, Favorite $favorite)
     {
-        $user = auth()->user();
+        $userId = auth()->id();
         $tweetId = $request->tweet_id;
-        $isFavorite = $favorite->isFavorite($user->id, $tweetId);
+        $isFavorite = $favorite->isFavorite($userId, $tweetId);
 
         if ($isFavorite) {
-            $favorite->where('user_id', $user->id)->where('tweet_id', $tweetId)->delete();
+            $favorite->where('user_id', $userId)->where('tweet_id', $tweetId)->delete();
         }
         return back();
     }

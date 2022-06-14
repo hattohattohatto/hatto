@@ -16,7 +16,6 @@ Route::get('/users', [UsersController::class, 'index']);
 |
 */
 
-
 Route::get('/', function () {
     return view('welcome');
 });
