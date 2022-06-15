@@ -1,7 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\UsersController;
 
+Route::get('/users', [UsersController::class, 'index']);
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,11 +20,28 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-#Auth::routes();
-
-#Route::get('/home', [HomeController::class, 'index'])->name('home');
-#Route::get('/home', 'HomeController@index')->name('home');
-
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+// ログイン状態
+Route::group(['middleware' => 'auth'], function () {
+
+    // ユーザ関連
+    Route::resource('users', 'UsersController', ['only' => ['index', 'show', 'edit', 'update']]);
+
+    // フォロー/フォロー解除を追加
+    Route::post('users/{user}/follow', [UsersController::class, 'follow'])->name('follow');
+    Route::delete('users/{user}/unfollow', [UsersController::class, 'unfollow'])->name('unfollow');;
+
+    // コメント関連
+    Route::resource('comments', 'CommentsController', ['only' => ['store']]);
+
+    // いいね関連
+    Route::post('favorites/{id}', 'App\Http\Controllers\FavoritesController@store')->name('favorites.store');
+    Route::delete('favorites/{id}', 'App\Http\Controllers\FavoritesController@destroy')->name('favorites.destroy');
+
+
+    // ツイート関連
+    Route::resource('tweets', 'TweetsController', ['only' => ['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']]);
+});
