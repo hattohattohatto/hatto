@@ -42,14 +42,14 @@
 
                     <div class="d-flex align-items-center">
                         @if (!in_array($user->id, array_column($tweet->favorites->toArray(), 'user_id'), TRUE))
-                            <form method="POST" action="{{ route('favorites.store', $timeline->id) }}" class="mb-0">
+                            <form method="POST" action="{{ route('favorites.store', $tweet->id) }}" class="mb-0">
                                 @csrf
 
                                 <input type="hidden" name="tweet_id" value="{{ $tweet->id }}">
                                 <button type="submit" class="btn p-0 border-0 text-primary"><i class="far fa-heart fa-fw"></i></button>
                             </form>
                         @else
-                            <form method="POST" action="{{ route('favorites.destroy', $timeline->id) }}" class="mb-0">
+                            <form method="POST" action="{{ route('favorites.destroy', $tweet->id) }}" class="mb-0">
                                 @csrf
                                 @method('DELETE')
 
