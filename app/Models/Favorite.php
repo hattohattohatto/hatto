@@ -12,11 +12,19 @@ class Favorite extends Model
      * @var bool
      */
     public $timestamps = false;
-<<<<<<< Updated upstream
-=======
 
     /**
-     * ツイートのIDを取得
+     * ホワイトリストのセット
+     * 
+     * @var array
+     */
+    protected $fillable = [
+        'user_id',
+        'tweet_id'
+    ];
+
+    /**
+     * コメントのIDを取得
      * 
      * @param  int $tweetId
      * 
@@ -26,5 +34,17 @@ class Favorite extends Model
     {
         return $this->with('user')->where('tweet_id', $tweetId)->get();
     }
->>>>>>> Stashed changes
+
+    /**
+     * いいね判定
+     *
+     * @param int $userId
+     * @param int $tweetId
+     * 
+     * @return boolean
+     */
+    public function isFavorite(int $userId, int $tweetId)
+    {
+        return (bool) $this->where('user_id', $userId)->where('tweet_id', $tweetId)->exists();
+    }
 }

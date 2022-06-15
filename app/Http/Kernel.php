@@ -2,7 +2,6 @@
 
 namespace App\Http;
 
-use App\Http\Middleware\Profilecheckmiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -59,13 +58,13 @@ class Kernel extends HttpKernel
         'auth.session' => \Illuminate\Session\Middleware\AuthenticateSession::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
+        'comment.validate' => \App\Http\Middleware\CommentValidateMiddleware::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
-        'profilecheck' => \App\Https\Middleware\Profilecheckmiddleware::class,
+        'profile.validate' => \App\Http\Middleware\ProfileValidateMiddleware::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'tweetcheck' => \App\Http\Middleware\Tweetcheckmiddleware::class,
+        'tweet.validate' => \App\Http\Middleware\TweetValidateMiddleware::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class
-
     ];
 }

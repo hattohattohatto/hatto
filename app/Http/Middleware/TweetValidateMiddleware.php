@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class tweetcheckmiddleware
+class TweetValidateMiddleware
 {
     /**
      * Handle an incoming request.
