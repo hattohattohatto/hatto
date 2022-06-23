@@ -47,4 +47,9 @@ class Favorite extends Model
     {
         return (bool) $this->where('user_id', $userId)->where('tweet_id', $tweetId)->exists();
     }
+
+    public function countFavorite(int $userId, int $tweetId)
+    {
+        return $this->where('user_id', $userId)->where('tweet_id', $tweetId)->count();
+    }
 }

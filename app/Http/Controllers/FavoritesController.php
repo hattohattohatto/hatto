@@ -8,17 +8,17 @@ use App\Models\Favorite;
 class FavoritesController extends Controller
 {
     /**
-     * いいね保存
+     * いいね処理
      *
      * @param Request $request
      * @param Favorite $favorite
      * 
      * @return \Illuminate\Foundation\helpers
      */
-    public function store(Request $request, Favorite $favorite)
+    public function fav(Request $request, Favorite $favorite)
     {
         $userId = auth()->id();
-        $tweetId = $request->tweet_id;
+        $tweetId = $request->review_id;
         $isFavorite = $favorite->isFavorite($userId, $tweetId);
 
         if (!$isFavorite) {
@@ -27,27 +27,10 @@ class FavoritesController extends Controller
                 'tweet_id' => $tweetId,
             ]);
             $favorite->save();
-        }
-        return back();
-    }
-
-    /**
-     * いいね削除
-     *
-     * @param Favorite $favorite
-     * @param Request $request
-     * 
-     * @return \Illuminate\Foundation\helpers
-     */
-    public function destroy(Request $request, Favorite $favorite)
-    {
-        $userId = auth()->id();
-        $tweetId = $request->tweet_id;
-        $isFavorite = $favorite->isFavorite($userId, $tweetId);
-
-        if ($isFavorite) {
+        } else {
             $favorite->where('user_id', $userId)->where('tweet_id', $tweetId)->delete();
         }
-        return back();
+        $param = ['favoriteCount' => $favorite->countFavorite($userId, $tweetId)];
+        return response()->json($param);
     }
 }

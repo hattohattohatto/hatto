@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+  aaaa
 @section('content')
 <div class="container">
     <div class="row justify-content-center mb-5">
@@ -42,21 +42,22 @@
 
                     <div class="d-flex align-items-center">
                         @if (!in_array($user->id, array_column($tweet->favorites->toArray(), 'user_id'), TRUE))
-                            <form method="POST" action="{{ route('favorites.store', $tweet->id) }}" class="mb-0">
-                                @csrf
+                        <span class="fav">
+                            @csrf
 
-                                <input type="hidden" name="tweet_id" value="{{ $tweet->id }}">
-                                <button type="submit" class="btn p-0 border-0 text-primary"><i class="far fa-heart fa-fw"></i></button>
-                            </form>
-                        @else
-                            <form method="POST" action="{{ route('favorites.destroy', $tweet->id) }}" class="mb-0">
-                                @csrf
-                                @method('DELETE')
+                            <input type="hidden" name="tweet_id" value="{{ $timeline->id }}">
+                            <button type="submit" class="btn p-0 border-0 text-primary fav-toggle" data-review-id="{{ $timeline->id }}"><i class="far fa-heart fa-fw"></i></button> 
+                            <span class="fav-counter mb-0 text-secondary" id = "favCounted">{{count($timeline->favorites)}}</span>
+                        </span>  
+                    @else
+                        <span class="fav">
+                            @csrf
 
-                                <button type="submit" class="btn p-0 border-0 text-danger"><i class="fas fa-heart fa-fw"></i></button>
-                            </form>
-                        @endif
-                        <p class="mb-0 text-secondary">{{ count($tweet->favorites) }}</p>
+                            <input type="hidden" name="tweet_id" value="{{ $timeline->id }}">
+                            <button type="submit" class="btn p-0 border-0 text-danger fav-toggle"  data-review-id="{{ $timeline->id }}"><i class="fas fa-heart fa-fw"></i></button> 
+                            <span class="fav-counter mb-0 text-secondary" id = "favCounted">{{count($timeline->favorites)}}</span>
+                        </span>  
+                    @endif
                     </div>
                     
                 </div>
@@ -129,3 +130,4 @@
     </div>
 </div>
 @endsection
+<script src ="{{ asset('/js/fav.js/') }}" defer></script>
