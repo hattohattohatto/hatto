@@ -48,8 +48,16 @@ class Favorite extends Model
         return (bool) $this->where('user_id', $userId)->where('tweet_id', $tweetId)->exists();
     }
 
-    public function countFavorite(int $userId, int $tweetId)
+    /**
+     * いいね数をカウント
+     *
+     * @param int $userId
+     * @param int $tweetId
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function countFavorite(int $tweetId)
     {
-        return $this->where('user_id', $userId)->where('tweet_id', $tweetId)->count();
+        return $this->where('tweet_id', $tweetId)->count();
     }
 }

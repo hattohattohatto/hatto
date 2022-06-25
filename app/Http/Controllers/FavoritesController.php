@@ -30,7 +30,8 @@ class FavoritesController extends Controller
         } else {
             $favorite->where('user_id', $userId)->where('tweet_id', $tweetId)->delete();
         }
-        $param = ['favoriteCount' => $favorite->countFavorite($userId, $tweetId)];
+
+        $param = ['favoriteCount' => $favorite->countFavorite($tweetId)];
         return response()->json($param);
     }
 }

@@ -102,18 +102,17 @@
                                         @csrf
 
                                         <input type="hidden" name="tweet_id" value="{{ $timeline->id }}">
-                                        <button type="submit" class="btn p-0 border-0 text-primary fav-toggle" data-review-id="{{ $timeline->id }}"><i class="far fa-heart fa-fw"></i></button> 
-                                        <span class="mb-0 text-secondary" id = "favCounted">{{count($timeline->favorites)}}</span>
+                                        <button type="submit" class="btn p-0 border-0 text-primary fav-toggle favColor{{ $timeline->id }}" data-review-id="{{ $timeline->id }}"><i class="far fa-heart fa-fw favIcon{{ $timeline->id }}"></i></button> 
+                                        <span class="mb-0 text-secondary" id = "favCounted{{ $timeline->id }}">{{count($timeline->favorites)}}</span>
                                     </span>  
                                 @else
-                                <span class="fav">
-                                    @csrf
+                                    <span class="fav">
+                                        @csrf
 
-                                    <input type="hidden" name="tweet_id" value="{{ $timeline->id }}">
-                                    <button type="submit" class="btn p-0 border-0 text-danger fav-toggle"  data-review-id="{{ $timeline->id }}"><i class="fas fa-heart fa-fw"></i></button> 
-                                    <span class="mb-0 text-secondary" id = "favCounted">{{count($timeline->favorites)}}</span>
-                                </span>  
-                                </form>
+                                        <input type="hidden" name="tweet_id" value="{{ $timeline->id }}">
+                                        <button type="submit" class="btn p-0 border-0 text-danger fav-toggle favColor{{ $timeline->id }} favColor{{ $timeline->id }}" data-review-id="{{ $timeline->id }}"><i class="fas fa-heart fa-fw favIcon{{ $timeline->id }}"></i></button> 
+                                        <span class="mb-0 text-secondary" id = "favCounted{{ $timeline->id }}">{{count($timeline->favorites)}}</span>
+                                    </span>  
                                 @endif
                             </div>
                         </div>

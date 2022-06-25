@@ -1,5 +1,5 @@
 @extends('layouts.app')
-  aaaa
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center mb-5">
@@ -45,17 +45,17 @@
                         <span class="fav">
                             @csrf
 
-                            <input type="hidden" name="tweet_id" value="{{ $timeline->id }}">
-                            <button type="submit" class="btn p-0 border-0 text-primary fav-toggle" data-review-id="{{ $timeline->id }}"><i class="far fa-heart fa-fw"></i></button> 
-                            <span class="fav-counter mb-0 text-secondary" id = "favCounted">{{count($timeline->favorites)}}</span>
+                            <input type="hidden" name="tweet_id" value="{{ $tweet->id }}">
+                            <button type="submit" class="btn p-0 border-0 text-primary fav-toggle favColor{{ $tweet->id }}" data-review-id="{{ $tweet->id }}"><i class="favIcon{{ $tweet->id }} far fa-heart fa-fw"></i></button> 
+                            <span class="fav-counter mb-0 text-secondary" id = "favCounted{{ $tweet->id }}">{{count($tweet->favorites)}}</span>
                         </span>  
                     @else
                         <span class="fav">
                             @csrf
 
-                            <input type="hidden" name="tweet_id" value="{{ $timeline->id }}">
-                            <button type="submit" class="btn p-0 border-0 text-danger fav-toggle"  data-review-id="{{ $timeline->id }}"><i class="fas fa-heart fa-fw"></i></button> 
-                            <span class="fav-counter mb-0 text-secondary" id = "favCounted">{{count($timeline->favorites)}}</span>
+                            <input type="hidden" name="tweet_id" value="{{ $tweet->id }}">
+                            <button type="submit" class="btn p-0 border-0 text-danger fav-toggle favColor{{ $tweet->id }}"data-review-id="{{ $tweet->id }}"><i class="favIcon{{ $tweet->id }} fas fa-heart fa-fw"></i></button> 
+                            <span class="fav-counter mb-0 text-secondary" id = "favCounted{{ $tweet->id }}">{{count($tweet->favorites)}}</span>
                         </span>  
                     @endif
                     </div>
