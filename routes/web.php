@@ -38,7 +38,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('comments', 'CommentsController', ['only' => ['store']]);
 
     // いいね関連
-    Route::post('/favorites', 'App\Http\Controllers\FavoritesController@fav')->name('favorites.store');
+    Route::post('/favorites', 'App\Http\Controllers\FavoritesController@favorite')->name('favorites');
 
 
     // ツイート関連

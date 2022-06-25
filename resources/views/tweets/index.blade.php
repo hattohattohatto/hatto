@@ -42,7 +42,7 @@
                             @endif
                             <div class="mr-3 d-flex align-items-center">
                                 <a href="{{ route('tweets.show', $timeline->id) }}"><i class="far fa-comment fa-fw"></i></a>
-                                <p class="mb-0 text-secondary" id = "followCount">{{ count($timeline->comments) }}</p>
+                                <p class="mb-0 text-secondary" id="followCount">{{ count($timeline->comments) }}</p>
                             </div>
                             <div class="d-flex align-items-center">
                                 @if (!in_array($user->id, array_column($timeline->favorites->toArray(), 'user_id'), TRUE))
@@ -51,17 +51,17 @@
 
                                         <input type="hidden" name="tweet_id" value="{{ $timeline->id }}">
                                         <button type="submit" class="btn p-0 border-0 text-primary fav-toggle favColor{{ $timeline->id }}" data-review-id="{{ $timeline->id }}"><i class="far fa-heart fa-fw favIcon{{ $timeline->id }}"></i></button> 
-                                        <span class="mb-0 text-secondary" id = "favCounted{{ $timeline->id }}">{{count($timeline->favorites)}}</span>
+                                        <span class="mb-0 text-secondary" id = "favCounted{{ $timeline->id }}">{{ count($timeline->favorites) }}</span>
                                     </span>  
                                 @else
-                                <span class="fav">
-                                    @csrf
+                                    <span class="fav">
+                                        @csrf
 
-                                    <input type="hidden" name="tweet_id" value="{{ $timeline->id }}">
-                                    <button type="submit" class="btn p-0 border-0 text-danger fav-toggle favColor{{ $timeline->id }}"  data-review-id="{{ $timeline->id }}"><i class="fas fa-heart fa-fw favIcon{{ $timeline->id }}"></i></button> 
-                                    <span class="mb-0 text-secondary" id = "favCounted{{ $timeline->id }}">{{count($timeline->favorites)}}</span>
-                                </span>  
-                                @endif
+                                        <input type="hidden" name="tweet_id" value="{{ $timeline->id }}">
+                                        <button type="submit" class="btn p-0 border-0 text-danger fav-toggle favColor{{ $timeline->id }}"  data-review-id="{{ $timeline->id }}"><i class="fas fa-heart fa-fw favIcon{{ $timeline->id }}"></i></button> 
+                                        <span class="mb-0 text-secondary" id = "favCounted{{ $timeline->id }}">{{ count($timeline->favorites) }}</span>
+                                    </span>  
+                                @endif 
                             </div>
                         </div>
                     </div>
@@ -74,4 +74,4 @@
     </div>
 </div>
 @endsection
-<script src ="{{ asset('/js/fav.js/') }}" defer></script>
+<script src ="{{ asset('/js/favorite.js/') }}" defer></script>
