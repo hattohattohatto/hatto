@@ -31,15 +31,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('users', 'UsersController', ['only' => ['index', 'show', 'edit', 'update']]);
 
     // フォロー/フォロー解除を追加
-    Route::post('users/{user}/follow', [UsersController::class, 'follow'])->name('follow');
-    Route::delete('users/{user}/unfollow', [UsersController::class, 'unfollow'])->name('unfollow');;
+    Route::post('/follow', [UsersController::class, 'follow'])->name('follow');
 
     // コメント関連
     Route::resource('comments', 'CommentsController', ['only' => ['store']]);
 
     // いいね関連
-    Route::post('/favorites', 'App\Http\Controllers\FavoritesController@fav')->name('favorites.store');
-
+    Route::post('/favorites', 'App\Http\Controllers\FavoritesController@fav')->name('favorites');
 
     // ツイート関連
     Route::resource('tweets', 'TweetsController', ['only' => ['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']]);

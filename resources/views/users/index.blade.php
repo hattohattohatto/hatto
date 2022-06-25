@@ -19,19 +19,17 @@
                             @endif
                             <div class="d-flex justify-content-end flex-grow-1">
                                 @if (auth()->user()->isFollowing($user->id))
-                                    <form action="{{ route('unfollow', $user->id) }}" method="POST">
-                                        {{ csrf_field() }}
-                                        {{ method_field('DELETE') }}
-                                        
+                                    <span class="follow">
+                                        @csrf
 
-                                        <button type="submit" class="btn btn-danger">フォロー解除</button>
-                                    </form>
+                                        <button type="submit" class="btn btn-danger follow-toggle follow{{ $user->id }}" data-follow-review-id="{{ $user->id }}" id="followBtn{{ $user->id }}">フォロー解除</button>
+                                    </span>
                                 @else
-                                    <form action="{{ route('follow', $user->id) }}" method="POST">
-                                        {{ csrf_field() }}
+                                    <span class="follow">
+                                        @csrf
 
-                                        <button type="submit" class="btn btn-primary">フォローする</button>
-                                    </form>
+                                        <button type="submit" class="btn btn-primary follow-toggle follow{{ $user->id }}" data-follow-review-id="{{ $user->id }}" id="followBtn{{ $user->id }}">フォローする</button>
+                                    </span>
                                 @endif
                             </div>
                         </div>
@@ -44,3 +42,4 @@
         </div>
     </div>
 @endsection
+<script src ="{{ asset('/js/follow.js/') }}" defer></script>

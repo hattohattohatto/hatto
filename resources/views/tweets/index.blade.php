@@ -54,13 +54,13 @@
                                         <span class="mb-0 text-secondary" id = "favCounted{{ $timeline->id }}">{{count($timeline->favorites)}}</span>
                                     </span>  
                                 @else
-                                <span class="fav">
-                                    @csrf
+                                    <span class="fav">
+                                        @csrf
 
-                                    <input type="hidden" name="tweet_id" value="{{ $timeline->id }}">
-                                    <button type="submit" class="btn p-0 border-0 text-danger fav-toggle favColor{{ $timeline->id }}"  data-review-id="{{ $timeline->id }}"><i class="fas fa-heart fa-fw favIcon{{ $timeline->id }}"></i></button> 
-                                    <span class="mb-0 text-secondary" id = "favCounted{{ $timeline->id }}">{{count($timeline->favorites)}}</span>
-                                </span>  
+                                        <input type="hidden" name="tweet_id" value="{{ $timeline->id }}">
+                                        <button type="submit" class="btn p-0 border-0 text-danger fav-toggle favColor{{ $timeline->id }}"  data-review-id="{{ $timeline->id }}"><i class="fas fa-heart fa-fw favIcon{{ $timeline->id }}"></i></button> 
+                                        <span class="mb-0 text-secondary" id = "favCounted{{ $timeline->id }}">{{count($timeline->favorites)}}</span>
+                                    </span>  
                                 @endif
                             </div>
                         </div>
