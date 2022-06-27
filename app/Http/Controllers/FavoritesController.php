@@ -15,10 +15,10 @@ class FavoritesController extends Controller
      * 
      * @return \Illuminate\Foundation\helpers
      */
-    public function fav(Request $request, Favorite $favorite)
+    public function favorite(Request $request, Favorite $favorite)
     {
         $userId = auth()->id();
-        $tweetId = $request->review_id;
+        $tweetId = $request->tweet_id;
         $isFavorite = $favorite->isFavorite($userId, $tweetId);
 
         if (!$isFavorite) {

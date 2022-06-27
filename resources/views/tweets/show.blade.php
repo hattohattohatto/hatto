@@ -41,13 +41,13 @@
                     </div>
 
                     <div class="d-flex align-items-center">
-                        @if (!in_array($user->id, array_column($tweet->favorites->toArray(), 'user_id'), TRUE))
+                    @if (!in_array($user->id, array_column($tweet->favorites->toArray(), 'user_id'), TRUE))
                         <span class="fav">
                             @csrf
 
                             <input type="hidden" name="tweet_id" value="{{ $tweet->id }}">
                             <button type="submit" class="btn p-0 border-0 text-primary fav-toggle favColor{{ $tweet->id }}" data-review-id="{{ $tweet->id }}"><i class="favIcon{{ $tweet->id }} far fa-heart fa-fw"></i></button> 
-                            <span class="fav-counter mb-0 text-secondary" id = "favCounted{{ $tweet->id }}">{{count($tweet->favorites)}}</span>
+                            <span class="mb-0 text-secondary" id = "favCounted{{ $tweet->id }}">{{ count($tweet->favorites) }}</span>
                         </span>  
                     @else
                         <span class="fav">
@@ -55,7 +55,7 @@
 
                             <input type="hidden" name="tweet_id" value="{{ $tweet->id }}">
                             <button type="submit" class="btn p-0 border-0 text-danger fav-toggle favColor{{ $tweet->id }}"data-review-id="{{ $tweet->id }}"><i class="favIcon{{ $tweet->id }} fas fa-heart fa-fw"></i></button> 
-                            <span class="fav-counter mb-0 text-secondary" id = "favCounted{{ $tweet->id }}">{{count($tweet->favorites)}}</span>
+                            <span class="mb-0 text-secondary" id = "favCounted{{ $tweet->id }}">{{ count($tweet->favorites )}}</span>
                         </span>  
                     @endif
                     </div>
@@ -130,4 +130,4 @@
     </div>
 </div>
 @endsection
-<script src ="{{ asset('/js/fav.js/') }}" defer></script>
+<script src ="{{ asset('/js/favorite.js/') }}" defer></script>

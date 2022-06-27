@@ -125,5 +125,5 @@
     </div>
 </div>
 @endsection
-<script src ="{{ asset('/js/fav.js/') }}" defer></script>
 <script src ="{{ asset('/js/followShow.js/') }}" defer></script>
+<script src ="{{ asset('/js/favorite.js/') }}" defer></script>

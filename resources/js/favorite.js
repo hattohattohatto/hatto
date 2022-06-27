@@ -9,9 +9,9 @@ jQuery(document).ready(function () {
                 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
             },
             url: '/favorites',
-            method: 'POST',
+            method: 'POST', 
             data: {
-                'review_id': favReviewId
+                'tweet_id': favReviewId
             },
         })
         .done(function (data) {

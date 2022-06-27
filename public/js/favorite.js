@@ -1,8 +1,8 @@
 /******/ (() => { // webpackBootstrap
 var __webpack_exports__ = {};
-/*!*****************************!*\
-  !*** ./resources/js/fav.js ***!
-  \*****************************/
+/*!**********************************!*\
+  !*** ./resources/js/favorite.js ***!
+  \**********************************/
 jQuery(document).ready(function () {
   var fav = $('.fav-toggle');
   var favReviewId;
@@ -16,7 +16,7 @@ jQuery(document).ready(function () {
       url: '/favorites',
       method: 'POST',
       data: {
-        'review_id': favReviewId
+        'tweet_id': favReviewId
       }
     }).done(function (data) {
       $('.favIcon' + favReviewId).toggleClass('far');
