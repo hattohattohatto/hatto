@@ -16,4 +16,4 @@ mix.js('resources/js/app.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css')
     .js('resources/js/fav.js','public/js')
     .js('resources/js/follow.js','public/js')
-    .js('resources/js/followerCount.js','public/js');
+    .js('resources/js/followShow.js','public/js');

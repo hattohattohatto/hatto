@@ -1,5 +1,6 @@
 jQuery(document).ready(function () {
     let follow = $('.follow-toggle');
+
     let followReviewId;
     follow.on('click', function () {
         let $this = $(this);

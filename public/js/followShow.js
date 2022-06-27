@@ -1,8 +1,8 @@
 /******/ (() => { // webpackBootstrap
 var __webpack_exports__ = {};
-/*!***************************************!*\
-  !*** ./resources/js/followerCount.js ***!
-  \***************************************/
+/*!************************************!*\
+  !*** ./resources/js/followShow.js ***!
+  \************************************/
 jQuery(document).ready(function () {
   var follow = $('.follow-toggle');
   var followReviewId;
@@ -19,7 +19,17 @@ jQuery(document).ready(function () {
         'follow_review_id': followReviewId
       }
     }).done(function (data) {
-      document.getElementById('follower-Count').innerHTML = data['followerCount'];
+      var object = document.getElementById('followBtn' + followReviewId);
+
+      if (object.textContent == "フォロー解除") {
+        object.textContent = "フォローする";
+      } else {
+        object.textContent = "フォロー解除";
+      }
+
+      $('.follow' + followReviewId).toggleClass('btn-primary');
+      $('.follow' + followReviewId).toggleClass('btn-danger');
+      document.getElementById('follower-count').innerHTML = data['followerCount'];
     }).fail(function () {
       console.log('fail');
     });

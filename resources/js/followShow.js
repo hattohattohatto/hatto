@@ -16,7 +16,18 @@ jQuery(document).ready(function () {
             },
         })
         .done(function (data) {
-            document.getElementById('follower-Count').innerHTML = data['followerCount']
+            let object = document.getElementById('followBtn'+followReviewId);
+
+            if (object.textContent == "フォロー解除"){
+                object.textContent = "フォローする";
+            }else{
+                object.textContent = "フォロー解除"; 
+            }
+
+            $('.follow'+followReviewId).toggleClass('btn-primary');
+            $('.follow'+followReviewId).toggleClass('btn-danger');
+
+            document.getElementById('follower-count').innerHTML = data['followerCount']
         })
         .fail(function () {
             console.log('fail'); 

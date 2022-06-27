@@ -50,7 +50,7 @@
                             </div>
                             <div class="p-2 d-flex flex-column align-items-center">
                                 <p class="font-weight-bold">フォロワー数</p>
-                                <span class="follower-count">{{ $followerCount }}</span>
+                                <span id="follower-count">{{ $followerCount }}</span>
                             </div>
                         </div>
                     </div>
@@ -126,5 +126,4 @@
 </div>
 @endsection
 <script src ="{{ asset('/js/fav.js/') }}" defer></script>
-<script src ="{{ asset('/js/follow.js/') }}" defer></script>
-<script src ="{{ asset('/js/followerCount.js/') }}" defer></script>
+<script src ="{{ asset('/js/followShow.js/') }}" defer></script>
