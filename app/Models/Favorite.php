@@ -47,4 +47,17 @@ class Favorite extends Model
     {
         return (bool) $this->where('user_id', $userId)->where('tweet_id', $tweetId)->exists();
     }
+
+    /**
+     * いいね数をカウント
+     *
+     * @param int $userId
+     * @param int $tweetId
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function countFavorite(int $tweetId)
+    {
+        return $this->where('tweet_id', $tweetId)->count();
+    }
 }

@@ -41,22 +41,23 @@
                     </div>
 
                     <div class="d-flex align-items-center">
-                        @if (!in_array($user->id, array_column($tweet->favorites->toArray(), 'user_id'), TRUE))
-                            <form method="POST" action="{{ route('favorites.store', $tweet->id) }}" class="mb-0">
-                                @csrf
+                    @if (!in_array($user->id, array_column($tweet->favorites->toArray(), 'user_id'), TRUE))
+                        <span class="fav">
+                            @csrf
 
-                                <input type="hidden" name="tweet_id" value="{{ $tweet->id }}">
-                                <button type="submit" class="btn p-0 border-0 text-primary"><i class="far fa-heart fa-fw"></i></button>
-                            </form>
-                        @else
-                            <form method="POST" action="{{ route('favorites.destroy', $tweet->id) }}" class="mb-0">
-                                @csrf
-                                @method('DELETE')
+                            <input type="hidden" name="tweet_id" value="{{ $tweet->id }}">
+                            <button type="submit" class="btn p-0 border-0 text-primary fav-toggle favColor{{ $tweet->id }}" data-review-id="{{ $tweet->id }}"><i class="favIcon{{ $tweet->id }} far fa-heart fa-fw"></i></button> 
+                            <span class="mb-0 text-secondary" id = "favCounted{{ $tweet->id }}">{{ count($tweet->favorites) }}</span>
+                        </span>  
+                    @else
+                        <span class="fav">
+                            @csrf
 
-                                <button type="submit" class="btn p-0 border-0 text-danger"><i class="fas fa-heart fa-fw"></i></button>
-                            </form>
-                        @endif
-                        <p class="mb-0 text-secondary">{{ count($tweet->favorites) }}</p>
+                            <input type="hidden" name="tweet_id" value="{{ $tweet->id }}">
+                            <button type="submit" class="btn p-0 border-0 text-danger fav-toggle favColor{{ $tweet->id }}"data-review-id="{{ $tweet->id }}"><i class="favIcon{{ $tweet->id }} fas fa-heart fa-fw"></i></button> 
+                            <span class="mb-0 text-secondary" id = "favCounted{{ $tweet->id }}">{{ count($tweet->favorites )}}</span>
+                        </span>  
+                    @endif
                     </div>
                     
                 </div>
@@ -129,3 +130,4 @@
     </div>
 </div>
 @endsection
+<script src ="{{ asset('/js/favorite.js/') }}" defer></script>
