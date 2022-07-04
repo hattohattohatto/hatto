@@ -20,18 +20,17 @@
                                     <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary">プロフィールを編集する</a>
                                 @else
                                     @if ($isFollowing)
-                                        <form action="{{ route('unfollow', $user->id) }}" method="POST">
-                                            {{ csrf_field() }}
-                                            {{ method_field('DELETE') }}
+                                        <span class="follow">
+                                            @csrf
 
-                                            <button type="submit" class="btn btn-danger">フォロー解除</button>
-                                        </form>
+                                            <button type="submit" class="btn btn-danger follow-toggle follow{{ $user->id }}" data-follow-review-id="{{ $user->id }}" id="followBtn{{ $user->id }}">フォロー解除</button>
+                                        </span>
                                     @else
-                                        <form action="{{ route('follow', $user->id) }}" method="POST">
-                                            {{ csrf_field() }}
+                                        <span class="follow">
+                                            @csrf
 
-                                            <button type="submit" class="btn btn-primary">フォローする</button>
-                                        </form>
+                                            <button type="submit" class="btn btn-primary follow-toggle follow{{ $user->id }}" data-follow-review-id="{{ $user->id }}" id="followBtn{{ $user->id }}">フォローする</button>
+                                        </span>
                                     @endif
 
                                     @if ($isFollowed)
@@ -51,7 +50,7 @@
                             </div>
                             <div class="p-2 d-flex flex-column align-items-center">
                                 <p class="font-weight-bold">フォロワー数</p>
-                                <span>{{ $followerCount }}</span>
+                                <span id="follower-count">{{ $followerCount }}</span>
                             </div>
                         </div>
                     </div>
@@ -126,4 +125,5 @@
     </div>
 </div>
 @endsection
+<script src ="{{ asset('/js/followShow.js/') }}" defer></script>
 <script src ="{{ asset('/js/favorite.js/') }}" defer></script>

@@ -97,12 +97,13 @@ class UsersController extends Controller
      * フォロー
      *
      * @param Follower $follower
-     * @param int $followedId
+     * @param Request $request
      * 
      * @return \Illuminate\Foundation\helpers
      */
-    public function follow(Follower $follower, int $followedId)
+    public function follow(Follower $follower, Request $request)
     {
+        $followedId = $request->follow_review_id;
         $followingId = auth()->id();
         $isFollowing = auth()->user()->isFollowing($followedId);
         if (!$isFollowing) {
@@ -111,25 +112,13 @@ class UsersController extends Controller
                 'followed_id' => $followedId,
             ]);
             $follower->save();
-        }
-        return back();
-    }
-
-    /**
-     * フォロー解除
-     *
-     * @param Follower $follower
-     * @param int $followedId
-     * 
-     * @return \Illuminate\Foundation\helpers
-     */
-    public function unfollow(Follower $follower, int $followedId)
-    {
-        $followingId = auth()->user()->id;
-        $isFollowing = auth()->user()->isFollowing($followedId);
-        if ($isFollowing) {
+        } else {
             $follower->where('following_id', $followingId)->where('followed_id', $followedId)->delete();
         }
-        return back();
+
+        $param = [
+            'followerCount' => $follower->getFollowerCount($followedId),
+        ];
+        return response()->json($param);
     }
 }
