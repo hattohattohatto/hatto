@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Tweet;
 use App\Models\Comment;
 use App\Models\Follower;
+use App\Models\User;
 use phpDocumentor\Reflection\PseudoTypes\False_;
 
 class TweetsController extends Controller
@@ -138,6 +139,32 @@ class TweetsController extends Controller
         $userId = auth()->id();
         $tweet->tweetDestroy($userId, $tweet->id);
 
+        return back();
+    }
+
+    /**
+     * リツイート機能
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Tweet $tweet
+     * 
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function retweet(int $id, User $user, Tweet $tweet)
+    {
+        $userId = auth()->id();
+
+        $retweetedName = Tweet::find($id)->user_id;
+        $userName = User::find($retweetedName)->name;
+        $retweetText = Tweet::find($id)->text;
+
+        $retweet = ">RT from " . $userName . "\n" . $retweetText;
+
+        $tweet->fill([
+            'user_id' => $userId,
+            'text' => $retweet
+        ]);
+        $tweet->save();
         return back();
     }
 }

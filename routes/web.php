@@ -41,4 +41,6 @@ Route::group(['middleware' => 'auth'], function () {
 
     // ツイート関連
     Route::resource('tweets', 'TweetsController', ['only' => ['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']]);
+
+    Route::get('/retweet/{id}', 'App\Http\Controllers\TweetsController@retweet')->name('retweet');
 });
