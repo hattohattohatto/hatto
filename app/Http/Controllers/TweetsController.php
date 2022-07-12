@@ -154,8 +154,8 @@ class TweetsController extends Controller
     {
         $userId = auth()->id();
 
-        $retweetedName = Tweet::find($id)->user_id;
-        $userName = User::find($retweetedName)->name;
+        $retweetedId = Tweet::find($id)->user_id;
+        $userName = User::find($retweetedId)->name;
         $retweetText = Tweet::find($id)->text;
 
         $retweet = ">RT from " . $userName . "\n" . $retweetText;
