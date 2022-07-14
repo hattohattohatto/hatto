@@ -40,7 +40,10 @@ Route::group(['middleware' => 'auth'], function () {
     // いいね関連
     Route::post('/favorites', 'App\Http\Controllers\FavoritesController@favorite')->name('favorites');
 
-
     // ツイート関連
     Route::resource('tweets', 'TweetsController', ['only' => ['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']]);
+
+    //ツイート検索機能
+    Route::get('searchShow', 'SearchController@show')->name('search.show');
+    Route::get('searchTweet', 'SearchController@search')->name('searchTweet');
 });
