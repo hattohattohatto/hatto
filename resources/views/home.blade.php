@@ -16,6 +16,10 @@
 
                     {{ __('You are logged in!') }}
                 </div>
+
+                <div class="card-body">
+                    <a href="{{ route('tweets.index',) }}" class="btn btn-md btn-primary">タイムライン</a>
+                </div>
             </div>
         </div>
     </div>

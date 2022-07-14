@@ -41,6 +41,9 @@
                                 </div>
                             @endif
                             <div class="mr-3 d-flex align-items-center">
+                                <a href="{{ route('retweet', $timeline->id) }}"><i class="fa fa-retweet fa-fw" aria-hidden="true"></i></a>
+                            </div>
+                            <div class="mr-3 d-flex align-items-center">
                                 <a href="{{ route('tweets.show', $timeline->id) }}"><i class="far fa-comment fa-fw"></i></a>
                                 <p class="mb-0 text-secondary" id="followCount">{{ count($timeline->comments) }}</p>
                             </div>
