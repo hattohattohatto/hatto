@@ -10,8 +10,13 @@ use App\Models\User;
 
 class SearchController extends Controller
 {
-
-
+    /**
+     * ツイート検索欄
+     *
+     * @param Request $request
+     * 
+     * @return \Illuminate\View\View
+     */
     public function show(Request $request)
     {
         $searchWord = $request->input('searchWord');
@@ -21,27 +26,39 @@ class SearchController extends Controller
         ]);
     }
 
+    /**
+     * ツイート検索結果表示
+     *
+     * @param User $user
+     * @param Request $request
+     * 
+     * @return \Illuminate\View\View
+     */
     public function search(User $user, Request $request)
     {
-        //入力される値nameの中身を定義する
-        $searchWord = $request->input('searchWord'); //商品名の値
+        $searchWord = $request->input('searchWord');
 
         $query = Tweet::query();
 
-        //商品名が入力された場合、m_productsテーブルから一致する商品を$queryに代入
         if (isset($searchWord)) {
             $query->where('text', 'like', '%' . self::escapeLike($searchWord) . '%');
         }
-        $products = $query->paginate(15);
+        $tweets = $query->paginate(15);
 
         return view('searchTweet', [
             'user' => $user,
-            'products' => $products,
+            'tweets' => $tweets,
             'searchWord' => $searchWord,
         ]);
     }
 
-    //「\\」「%」「_」などの記号を文字としてエスケープさせる
+    /**
+     * ツイート検索においての記号等の排除
+     *
+     * @param [type] $str
+     * 
+     * @return \Illuminate\Http\Response
+     */
     public static function escapeLike($str)
     {
         return str_replace(['\\', '%', '_'], ['\\\\', '\%', '\_'], $str);

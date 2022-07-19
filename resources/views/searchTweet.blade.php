@@ -26,9 +26,10 @@
                 </div>
             </div>
         </div>
-        @if (!empty($products))
+
+        @if (!empty($tweets))
         <div class="productTable">
-            <p>全{{ $products->count() }}件</p>
+            <p>全{{ $tweets->count() }}件</p>
             <table class="table table-hover">
                 <thead style="background-color: #ffd900">
                     <tr>
@@ -37,11 +38,12 @@
                         <th>ツイートリンク</th>
                     </tr>
                 </thead>
-                @foreach($products as $product)
+
+                @foreach($tweets as $tweet)
                 <tr>
-                    <td>{{ $product->text }}</td>
-                    <td>{{ $product->user->name }}</td>
-                    <td><a href= "{{ route('tweets.show', $product->id) }}" class="btn btn-primary btn-sm">該当ツイートへ</a></td>
+                    <td>{{ $tweet->text }}</td>
+                    <td>{{ $tweet->user->name }}</td>
+                    <td><a href= "{{ route('tweets.show', $tweet->id) }}" class="btn btn-primary btn-sm">該当ツイートへ</a></td>
                 </tr>
                 @endforeach   
             </table>
@@ -50,7 +52,7 @@
         <!--ページネーション-->
         <div class="d-flex justify-content-center">
             {{-- appendsでカテゴリを選択したまま遷移 --}}
-            {{ $products->appends(request()->input())->links() }}
+            {{ $tweets->appends(request()->input())->links() }}
         </div>
         <!--ページネーションここまで-->
         @endif

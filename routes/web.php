@@ -31,8 +31,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('users', 'UsersController', ['only' => ['index', 'show', 'edit', 'update']]);
 
     // フォロー/フォロー解除を追加
-    Route::post('users/{user}/follow', [UsersController::class, 'follow'])->name('follow');
-    Route::delete('users/{user}/unfollow', [UsersController::class, 'unfollow'])->name('unfollow');;
+    Route::post('/follow', [UsersController::class, 'follow'])->name('follow');
 
     // コメント関連
     Route::resource('comments', 'CommentsController', ['only' => ['store']]);
@@ -43,7 +42,9 @@ Route::group(['middleware' => 'auth'], function () {
     // ツイート関連
     Route::resource('tweets', 'TweetsController', ['only' => ['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']]);
 
+    //ツイート検索機能
     Route::get('searchShow', 'SearchController@show')->name('search.show');
-
     Route::get('searchTweet', 'SearchController@search')->name('searchTweet');
+
+    Route::get('/retweet/{id}', 'App\Http\Controllers\TweetsController@retweet')->name('retweet');
 });
