@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\softDeletes;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Tweet extends Model
 {
@@ -14,6 +14,7 @@ class Tweet extends Model
      * @var array
      */
     protected $fillable = [
+        'user_id',
         'text'
     ];
 
