@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Tweet;
 use App\Models\User;
 
-class SearchController extends Controller
+class SearchUserController extends Controller
 {
     /**
      * ツイート検索欄
@@ -21,7 +21,7 @@ class SearchController extends Controller
     {
         $searchWord = $request->input('searchWord');
 
-        return view('searchTweet', [
+        return view('searchUser', [
             'searchWord' => $searchWord,
         ]);
     }
@@ -29,25 +29,25 @@ class SearchController extends Controller
     /**
      * ツイート検索結果表示
      *
-     * @param User $user
+     * @param Tweet $tweet
      * @param Request $request
      * 
      * @return \Illuminate\View\View
      */
-    public function search(User $user, Request $request)
+    public function search(Tweet $tweet, Request $request)
     {
         $searchWord = $request->input('searchWord');
 
-        $query = Tweet::query();
+        $query = User::query();
 
         if (isset($searchWord)) {
-            $query->where('text', 'like', '%' . self::escapeLike($searchWord) . '%');
+            $query->where('screen_name', 'like', '%' . self::escapeLike($searchWord) . '%');
         }
-        $tweets = $query->paginate(15);
+        $users = $query->paginate(15);
 
-        return view('searchTweet', [
-            'user' => $user,
-            'tweets' => $tweets,
+        return view('searchUser', [
+            'users' => $users,
+            'tweet' => $tweet,
             'searchWord' => $searchWord,
         ]);
     }

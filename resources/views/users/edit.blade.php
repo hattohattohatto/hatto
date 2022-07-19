@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@extends('layouts.link')
+
+@extends('layouts.searchUser')
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">

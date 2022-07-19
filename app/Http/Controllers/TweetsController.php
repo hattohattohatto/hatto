@@ -24,34 +24,42 @@ class TweetsController extends Controller
     /**
      * ツイートのリストを表示
      *
-     * @param \App\Models\Tweet
-     * @param \App\Models\Follower
+     * @param \App\Models\Tweet $tweet
+     * @param \App\Models\Follower $follower
+     * @param  \Illuminate\Http\Request  $request
+     * 
      * 
      * @return \Illuminate\View\View
      */
-    public function index(Tweet $tweet, Follower $follower)
+    public function index(Tweet $tweet, Follower $follower, Request $request)
     {
         $user = auth()->user();
         $followingIds = $follower->followingIds($user->id)->pluck('followed_id')->toArray();
         $fetchTimelines = $tweet->getTimelines($user->id, $followingIds);
+        $searchWord = $request->input('searchWord');
 
         return view('tweets.index', [
             'user'  => $user,
-            'timelines' => $fetchTimelines
+            'timelines' => $fetchTimelines,
+            'searchWord' => $searchWord
         ]);
     }
 
     /**
      * ツイート作成
+     * 
+     * @param Request $request
      *
      * @return \Illuminate\view\View
      */
-    public function create()
+    public function create(Request $request)
     {
         $user = auth()->user();
+        $searchWord = $request->input('searchWord');
 
         return view('tweets.create', [
-            'user' => $user
+            'user' => $user,
+            'searchWord' => $searchWord
         ]);
     }
 
@@ -77,19 +85,22 @@ class TweetsController extends Controller
      *
      * @param  \App\Models\Tweet $tweet
      * @param  \App\Models\Comment $comment
+     * @param Request $request
      * 
      * @return \Illuminate\View\View
      */
-    public function show(Tweet $tweet, Comment $comment)
+    public function show(Tweet $tweet, Comment $comment, Request $request)
     {
         $user = auth()->user();
         $tweet = $tweet->getTweet($tweet->id);
         $comments = $comment->getComments($tweet->id);
+        $searchWord = $request->input('searchWord');
 
         return view('tweets.show', [
             'user' => $user,
             'tweet' => $tweet,
-            'comments' => $comments
+            'comments' => $comments,
+            'searchWord' => $searchWord,
         ]);
     }
 
@@ -97,17 +108,20 @@ class TweetsController extends Controller
      * ツイート編集
      *
      * @param Tweet $tweet
+     * @param Request $request
      * 
      * @return \Illuminate\View\View
      */
-    public function edit(Tweet $tweet)
+    public function edit(Tweet $tweet, Request $request)
     {
         $user = auth()->user();
         $tweets = $tweet->getEditTweet($user->id, $tweet->id);
+        $searchWord = $request->input('searchWord');
 
         return isset($tweets) == False ? redirect('tweet') : view('tweets.edit', [
             'user' => $user,
-            'tweets' => $tweets
+            'tweets' => $tweets,
+            'searchWord' => $searchWord
         ]);
     }
 

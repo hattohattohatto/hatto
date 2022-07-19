@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller; 
+use App\Http\Controllers\Controller;
 
 class HomeController extends Controller
 {
@@ -18,11 +18,17 @@ class HomeController extends Controller
 
     /**
      * homeのページを表示
+     * 
+     * @param Request $request
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('home');
+        $searchWord = $request->input('searchWord');
+
+        return view('home', [
+            'searchWord' => $searchWord,
+        ]);
     }
 }

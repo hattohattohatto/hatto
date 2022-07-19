@@ -96,16 +96,9 @@
                 </div>
             </div>
         </nav>
-        <main>
-            <div class="localNavigation">
-                @yield('link')
-            </div>
-            <div class="content">
-                @yield('content')
-            </div>
-            <div class="localNavigation">
-                @yield('search')
-            </div>
+
+        <main class="py-4">
+            @yield('content')
         </main>
     </div>
 </body>

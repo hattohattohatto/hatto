@@ -1,11 +1,12 @@
 @extends('layouts.app')
 
+@extends('layouts.link')
+
+@extends('layouts.searchTweet')
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8 mb-3 text-right">
-            <a href="{{ route('users.index') }}">ユーザ一覧 <i class="fas fa-users" class="fa-fw"></i> </a>
-        </div>
         @if (isset($timelines))
             @foreach ($timelines as $timeline)
                 <div class="col-md-8 mb-3">
