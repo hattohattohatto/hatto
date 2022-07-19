@@ -43,8 +43,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('tweets', 'TweetsController', ['only' => ['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']]);
 
     //ツイート検索機能
-    Route::get('searchShow', 'SearchController@show')->name('search.show');
-    Route::get('searchTweet', 'SearchController@search')->name('searchTweet');
+    Route::get('searchShow', 'SearchTweetController@show')->name('search.show');
+    Route::get('searchTweet', 'SearchTweetController@search')->name('searchTweet');
+
+    //ツイート検索機能
+    Route::get('searchUserShow', 'SearchUserController@show')->name('searchUser.show');
+    Route::get('searchUser', 'SearchUserController@search')->name('searchUser');
 
     Route::get('/retweet/{id}', 'App\Http\Controllers\TweetsController@retweet')->name('retweet');
 });

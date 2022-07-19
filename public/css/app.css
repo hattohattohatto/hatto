@@ -83,6 +83,30 @@ body {
   background-color: var(--bs-body-bg);
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  min-height: 100vh;
+}
+
+.space{
+  margin: 50px;
+  padding: 50px;
+}
+
+.bold{
+  font-weight: bold;
+}
+
+.bold-bk { 
+  font-weight: bold; 
+  color: #000;
+}
+
+input.form-width{ width: 240%; }
+
+.fill{
+  display: block;
+  width: 100%;
+  background-size: cover;  
+  background-position: center center;
 }
 
 hr {
@@ -7493,6 +7517,24 @@ textarea.form-control-lg {
 .py-5 {
   padding-top: 3rem !important;
   padding-bottom: 3rem !important;
+}
+
+main{
+  display: flex;
+  min-height: 100vh;
+  margin-top: 10px;
+}
+
+.localNavigation{
+  flex: 1;
+  text-align: center;
+  background-color: #e7f1ff;
+  color: #fff;
+}
+.content{
+  flex: 2;
+  text-align: center;
+  background-color: #fff;
 }
 
 .pt-0 {

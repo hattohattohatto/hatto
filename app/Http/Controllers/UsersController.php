@@ -27,12 +27,14 @@ class UsersController extends Controller
      * 
      * @return \Illuminate\View\View
      */
-    public function index(User $user)
+    public function index(User $user, Request $request)
     {
         $users = $user->getAllUsers(auth()->id());
+        $searchWord = $request->input('searchWord');
 
         return view('users.index', [
-            'allUsers'  => $users
+            'allUsers'  => $users,
+            'searchWord' => $searchWord
         ]);
     }
 
@@ -42,10 +44,11 @@ class UsersController extends Controller
      * @param  User $User
      * @param  Tweet $Tweet
      * @param  Follower $Follower
+     * @param Request $request
      * 
      * @return \Illuminate\View\View
      */
-    public function show(User $user, Tweet $tweet, Follower $follower)
+    public function show(User $user, Tweet $tweet, Follower $follower, Request $request)
     {
         $isFollowing = auth()->user()->isFollowing($user->id);
         $isFollowed = auth()->user()->isFollowed($user->id);
@@ -53,6 +56,7 @@ class UsersController extends Controller
         $tweetCount = $tweet->getTweetCount($user->id);
         $followCount = $follower->getFollowCount($user->id);
         $followerCount = $follower->getFollowerCount($user->id);
+        $searchWord = $request->input('searchWord');
 
         return view('users.show', [
             'user' => $user,
@@ -61,7 +65,8 @@ class UsersController extends Controller
             'timelines' => $timelines,
             'tweetCount' => $tweetCount,
             'followCount' => $followCount,
-            'followerCount' => $followerCount
+            'followerCount' => $followerCount,
+            'searchWord' => $searchWord
         ]);
     }
 

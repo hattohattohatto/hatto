@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@extends('layouts.link')
+
+@extends('layouts.searchTweet')
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -15,10 +19,6 @@
                     @endif
 
                     {{ __('You are logged in!') }}
-                </div>
-
-                <div class="card-body">
-                    <a href="{{ route('tweets.index',) }}" class="btn btn-md btn-primary">タイムライン</a>
                 </div>
             </div>
         </div>
