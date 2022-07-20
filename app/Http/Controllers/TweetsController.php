@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use App\Models\Tweet;
 use App\Models\Comment;
@@ -135,6 +136,10 @@ class TweetsController extends Controller
      */
     public function update(Request $request, Tweet $tweet)
     {
+        if (!Gate::allows('update-tweet', $tweet)) {
+            abort(403);
+        }
+
         $tweetData = $request->all();
         $tweet->tweetUpdate($tweet->id, $tweetData);
 
