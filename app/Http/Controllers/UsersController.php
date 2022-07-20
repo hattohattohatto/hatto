@@ -74,12 +74,18 @@ class UsersController extends Controller
      * ツイート作成
      *
      * @param  User $user
+     * @param Request $request
      * 
      * @return \Illuminate\View\View
      */
-    public function edit(User $user)
+    public function edit(User $user, Request $request)
     {
-        return view('users.edit', ['user' => $user]);
+        $searchWord = $request->input('searchWord');
+
+        return view('users.edit', [
+            'user' => $user,
+            'searchWord' => $searchWord
+        ]);
     }
 
     /**
