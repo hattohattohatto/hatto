@@ -14,7 +14,7 @@ class CommentsController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('comment.validate')->only(['store', 'update']);
+        $this->middleware('comment.validate')->only(['store']);
     }
 
     /**
