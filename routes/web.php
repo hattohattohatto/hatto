@@ -1,10 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\UsersController;
 
-Route::get('/users', [UsersController::class,'index' ]);
+Route::get('/users', [UsersController::class, 'index']);
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,26 +20,35 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-#Auth::routes();
-
-#Route::get('/home', [HomeController::class, 'index'])->name('home');
-#Route::get('/home', 'HomeController@index')->name('home');
-
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 // ログイン状態
-Route::group(['middleware' => 'auth'], function() {
+Route::group(['middleware' => 'auth'], function () {
 
     // ユーザ関連
     Route::resource('users', 'UsersController', ['only' => ['index', 'show', 'edit', 'update']]);
-    
+
     // フォロー/フォロー解除を追加
-    Route::post('follow/{id}', 'UsersController@follow')->name('follow');
-    Route::delete('unfollow/{id}', 'UsersController@unfollow')->name('unfollow');
+    Route::post('/follow', [UsersController::class, 'follow'])->name('follow');
+
+    // コメント関連
+    Route::resource('comments', 'CommentsController', ['only' => ['store']]);
+
+    // いいね関連
+    Route::post('/favorites', 'App\Http\Controllers\FavoritesController@favorite')->name('favorites');
 
     // ツイート関連
     Route::resource('tweets', 'TweetsController', ['only' => ['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']]);
-});
 
+    //ツイート検索機能
+    Route::get('searchShow', 'SearchTweetController@show')->name('search.show');
+    Route::get('searchTweet', 'SearchTweetController@search')->name('searchTweet');
+
+    //ツイート検索機能
+    Route::get('searchUserShow', 'SearchUserController@show')->name('searchUser.show');
+    Route::get('searchUser', 'SearchUserController@search')->name('searchUser');
+
+    Route::get('/retweet/{id}', 'App\Http\Controllers\TweetsController@retweet')->name('retweet');
+});

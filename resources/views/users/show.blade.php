@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@extends('layouts.link')
+
+@extends('layouts.searchUser')
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -17,24 +21,23 @@
                         <div class="d-flex">
                             <div>
                                 @if ($user->id === Auth::user()->id)
-                                    <a href="{{ url('users/' .$user->id .'/edit') }}" class="btn btn-primary">プロフィールを編集する</a>
+                                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary">プロフィールを編集する</a>
                                 @else
-                                    @if ($is_following)
-                                        <form action="{{ route('unfollow', ['id' => $user->id]) }}" method="POST">
-                                            {{ csrf_field() }}
-                                            {{ method_field('DELETE') }}
+                                    @if ($isFollowing)
+                                        <span class="follow">
+                                            @csrf
 
-                                            <button type="submit" class="btn btn-danger">フォロー解除</button>
-                                        </form>
+                                            <button type="submit" class="btn btn-danger follow-toggle follow{{ $user->id }}" data-follow-review-id="{{ $user->id }}" id="followBtn{{ $user->id }}">フォロー解除</button>
+                                        </span>
                                     @else
-                                        <form action="{{ route('follow', ['id' => $user->id]) }}" method="POST">
-                                            {{ csrf_field() }}
+                                        <span class="follow">
+                                            @csrf
 
-                                            <button type="submit" class="btn btn-primary">フォローする</button>
-                                        </form>
+                                            <button type="submit" class="btn btn-primary follow-toggle follow{{ $user->id }}" data-follow-review-id="{{ $user->id }}" id="followBtn{{ $user->id }}">フォローする</button>
+                                        </span>
                                     @endif
 
-                                    @if ($is_followed)
+                                    @if ($isFollowed)
                                         <span class="mt-2 px-1 bg-secondary text-light">フォローされています</span>
                                     @endif
                                 @endif
@@ -43,15 +46,15 @@
                         <div class="d-flex justify-content-end">
                             <div class="p-2 d-flex flex-column align-items-center">
                                 <p class="font-weight-bold">ツイート数</p>
-                                <span>{{ $tweet_count }}</span>
+                                <span>{{ $tweetCount }}</span>
                             </div>
                             <div class="p-2 d-flex flex-column align-items-center">
                                 <p class="font-weight-bold">フォロー数</p>
-                                <span>{{ $follow_count }}</span>
+                                <span>{{ $followCount }}</span>
                             </div>
                             <div class="p-2 d-flex flex-column align-items-center">
                                 <p class="font-weight-bold">フォロワー数</p>
-                                <span>{{ $follower_count }}</span>
+                                <span id="follower-count">{{ $followerCount }}</span>
                             </div>
                         </div>
                     </div>
@@ -66,7 +69,7 @@
                             <img src="{{ asset('storage/profile_image/' .$user->profile_image) }}" class="rounded-circle" width="50" height="50">
                             <div class="ml-2 d-flex flex-column flex-grow-1">
                                 <p class="mb-0">{{ $timeline->user->name }}</p>
-                                <a href="{{ url('users/' .$timeline->user->id) }}" class="text-secondary">{{ $timeline->user->screen_name }}</a>
+                                <a href="{{ route('users.show', $timeline->user->id) }}" class="text-secondary">{{ $timeline->user->screen_name }}</a>
                             </div>
                             <div class="d-flex justify-content-end flex-grow-1">
                                 <p class="mb-0 text-secondary">{{ $timeline->created_at->format('Y-m-d H:i') }}</p>
@@ -82,23 +85,41 @@
                                         <i class="fas fa-ellipsis-v fa-fw"></i>
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                        <form method="POST" action="{{ url('tweets/' .$timeline->id) }}" class="mb-0">
+                                        <form method="POST" action="{{ route('tweets.destroy', $timeline->id) }}" class="mb-0">
                                             @csrf
                                             @method('DELETE')
 
-                                            <a href="{{ url('tweets/' .$timeline->id .'/edit') }}" class="dropdown-item">編集</a>
+                                            <a href="{{ route('tweets.edit', $timeline->id) }}" class="dropdown-item">編集</a>
                                             <button type="submit" class="dropdown-item del-btn">削除</button>
                                         </form>
                                     </div>
                                 </div>
                             @endif
                             <div class="mr-3 d-flex align-items-center">
-                                <a href="#"><i class="far fa-comment fa-fw"></i></a>
+                                <a href="{{ route('retweet', $timeline->id) }}"><i class="fa fa-retweet fa-fw" aria-hidden="true"></i></a>
+                            </div>
+                            <div class="mr-3 d-flex align-items-center">
+                                <a href="{{ route('tweets.show', $timeline->id) }}"><i class="far fa-comment fa-fw"></i></a>
                                 <p class="mb-0 text-secondary">{{ count($timeline->comments) }}</p>
                             </div>
                             <div class="d-flex align-items-center">
-                                <a href="#"><i class="far fa-comment fa-fw"></i></a>
-                                <p class="mb-0 text-secondary">{{ count($timeline->favorites) }}</p>
+                                @if (!in_array(Auth::user()->id, array_column($timeline->favorites->toArray(), 'user_id'), TRUE))
+                                    <span class="fav">
+                                        @csrf
+
+                                        <input type="hidden" name="tweet_id" value="{{ $timeline->id }}">
+                                        <button type="submit" class="btn p-0 border-0 text-primary fav-toggle favColor{{ $timeline->id }}" data-review-id="{{ $timeline->id }}"><i class="far fa-heart fa-fw favIcon{{ $timeline->id }}"></i></button> 
+                                        <span class="mb-0 text-secondary" id = "favCounted{{ $timeline->id }}">{{count($timeline->favorites)}}</span>
+                                    </span>  
+                                @else
+                                    <span class="fav">
+                                        @csrf
+
+                                        <input type="hidden" name="tweet_id" value="{{ $timeline->id }}">
+                                        <button type="submit" class="btn p-0 border-0 text-danger fav-toggle favColor{{ $timeline->id }} favColor{{ $timeline->id }}" data-review-id="{{ $timeline->id }}"><i class="fas fa-heart fa-fw favIcon{{ $timeline->id }}"></i></button> 
+                                        <span class="mb-0 text-secondary" id = "favCounted{{ $timeline->id }}">{{count($timeline->favorites)}}</span>
+                                    </span>  
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -111,3 +132,5 @@
     </div>
 </div>
 @endsection
+<script src ="{{ asset('/js/followShow.js/') }}" defer></script>
+<script src ="{{ asset('/js/favorite.js/') }}" defer></script>

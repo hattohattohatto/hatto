@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@extends('layouts.link')
+
+@extends('layouts.searchUser')
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -8,7 +12,7 @@
                 <div class="card-header">Update</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ url('users/' .$user->id) }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('users.update', $user->id) }}" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 

@@ -1,16 +1,20 @@
 @extends('layouts.app')
 
+@extends('layouts.link')
+
+@extends('layouts.searchUser')
+
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
-                @foreach ($all_users as $user)
+                @foreach ($allUsers as $user)
                     <div class="card">
                         <div class="card-haeder p-3 w-100 d-flex">
                             <img src="{{ asset('storage/profile_image/' .$user->profile_image) }}" class="rounded-circle" width="50" height="50">
                             <div class="ml-2 d-flex flex-column">
                                 <p class="mb-0">{{ $user->name }}</p>
-                                <a href="{{ url('users/' .$user->id) }}" class="text-secondary">{{ $user->screen_name }}</a>
+                                <a href="{{ route('users.show', $user->id) }}" class="text-secondary">{{ $user->screen_name }}</a>
                             </div>
                             @if (auth()->user()->isFollowed($user->id))
                                 <div class="px-2">
@@ -19,19 +23,17 @@
                             @endif
                             <div class="d-flex justify-content-end flex-grow-1">
                                 @if (auth()->user()->isFollowing($user->id))
-                                    <form action="{{ route('unfollow', ['id' => $user->id]) }}" method="POST">
-                                        {{ csrf_field() }}
-                                        {{ method_field('DELETE') }}
-                                        
+                                    <span class="follow">
+                                        @csrf
 
-                                        <button type="submit" class="btn btn-danger">フォロー解除</button>
-                                    </form>
+                                        <button type="submit" class="btn btn-danger follow-toggle follow{{ $user->id }}" data-follow-review-id="{{ $user->id }}" id="followBtn{{ $user->id }}">フォロー解除</button>
+                                    </span>
                                 @else
-                                <form action="{{ route('follow', ['id' => $user->id]) }}" method="POST">
-                                        {{ csrf_field() }}
+                                    <span class="follow">
+                                        @csrf
 
-                                        <button type="submit" class="btn btn-primary">フォローする</button>
-                                    </form>
+                                        <button type="submit" class="btn btn-primary follow-toggle follow{{ $user->id }}" data-follow-review-id="{{ $user->id }}" id="followBtn{{ $user->id }}">フォローする</button>
+                                    </span>
                                 @endif
                             </div>
                         </div>
@@ -40,7 +42,8 @@
             </div>
         </div>
         <div class="my-4 d-flex justify-content-center">
-            {{ $all_users->links() }}
+            {{ $allUsers->links() }}
         </div>
     </div>
 @endsection
+<script src ="{{ asset('/js/follow.js/') }}" defer></script>
